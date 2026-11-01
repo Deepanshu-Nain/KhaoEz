@@ -14,10 +14,13 @@
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
+        tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          screens: {
+            'xs': '400px'
+          },
           colors: {
             'primary': '#0c412d',
             'primary-container': '#285943',
@@ -320,8 +323,8 @@
   <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-subtle shadow-xs transition-all duration-200">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
 
-      <!-- Brand Logo & Interactive Navigation Tabs at Right of Brand Name -->
-      <div class="flex items-center gap-1.5 sm:gap-4 lg:gap-6 min-w-0 flex-1 sm:flex-initial">
+      <!-- Brand Logo & Interactive Navigation Tabs (Desktop md+) -->
+      <div class="flex items-center gap-3 sm:gap-4 lg:gap-6 shrink-0">
         <!-- Brand Logo (Home & Backtrack) -->
         <a href="javascript:void(0)" onclick="showPage('page-home')"
           class="flex items-center gap-1.5 sm:gap-2 group cursor-pointer shrink-0" title="KhaoEzy Home">
@@ -329,100 +332,99 @@
           <span class="brand-name text-xl sm:text-2xl lg:text-3xl tracking-tight">KhaoEzy</span>
         </a>
 
-        <!-- Interactive Navigation Tabs: Easily Switch & Backtrack -->
-        <nav class="flex items-center p-1 bg-surface-card-warm/95 rounded-full border border-border-subtle shadow-xs overflow-x-auto no-scrollbar shrink-0 max-w-[calc(100vw-130px)] sm:max-w-none touch-pan-x">
+        <!-- Interactive Navigation Tabs: Easily Switch & Backtrack (Visible on Desktop / Tablet md+) -->
+        <nav class="hidden md:flex items-center p-1 bg-surface-card-warm/95 rounded-full border border-border-subtle shadow-xs shrink-0">
           <!-- Tab 1: Menu -->
           <button onclick="navigateTo('page-home', 'menu')" id="nav-tab-menu"
-            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-primary text-white shadow-xs flex items-center gap-1 shrink-0 whitespace-nowrap"
+            class="topbar-tab px-3 lg:px-4 py-1.5 rounded-full text-xs lg:text-sm font-bold transition-all bg-primary text-white shadow-xs flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             title="This Week's Chef Menu">
-            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">restaurant_menu</span>
+            <span class="material-symbols-outlined text-[16px] lg:text-[18px]">restaurant_menu</span>
             <span>Menu</span>
           </button>
           
           <!-- Tab 2: Science & Scoring -->
           <button onclick="showPage('page-science')" id="nav-tab-science"
-            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
-            title="Clinical Nutrition & Metabolic Health Scoring">
-            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">analytics</span>
-            <span class="hidden md:inline">Science &amp; Scoring</span>
-            <span class="md:hidden">Science</span>
+            class="topbar-tab px-3 lg:px-4 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+            title="Clinical Nutrition &amp; Metabolic Health Scoring">
+            <span class="material-symbols-outlined text-[16px] lg:text-[18px]">analytics</span>
+            <span>Science &amp; Scoring</span>
           </button>
           
           <!-- Tab 3: Farm Sourcing -->
           <button onclick="showPage('page-sourcing')" id="nav-tab-sourcing"
-            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
+            class="topbar-tab px-3 lg:px-4 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             title="Regenerative Indian Farms &amp; Sourcing">
-            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">agriculture</span>
-            <span class="hidden md:inline">Farm Sourcing</span>
-            <span class="md:hidden">Sourcing</span>
+            <span class="material-symbols-outlined text-[16px] lg:text-[18px]">agriculture</span>
+            <span>Farm Sourcing</span>
           </button>
           
           <!-- Tab 4: Member Dashboard -->
           <button onclick="showPage('page-dashboard')" id="nav-tab-dashboard"
-            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
+            class="topbar-tab px-3 lg:px-4 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             title="Member Dashboard &amp; Deliveries">
-            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">dashboard</span>
+            <span class="material-symbols-outlined text-[16px] lg:text-[18px]">dashboard</span>
             <span>Dashboard</span>
           </button>
         </nav>
       </div>
 
       <!-- Right Action Items: Cart, Login / Profile, Choose Plan, Mobile Toggle -->
-      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         
         <!-- Cart Drawer Button with live badge -->
         <button onclick="toggleCartDrawer(true)"
-          class="relative p-2 rounded-full hover:bg-surface-card-warm text-primary transition-colors flex items-center justify-center border border-border-subtle shrink-0"
-          title="Open Your Box / Cart">
-          <span class="material-symbols-outlined text-[20px] sm:text-[24px]">shopping_bag</span>
+          class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-surface-card-warm/80 hover:bg-surface-card-warm text-primary transition-colors flex items-center justify-center border border-border-subtle shrink-0"
+          title="Open Your Box / Cart" aria-label="Shopping Cart">
+          <span class="material-symbols-outlined text-[20px] sm:text-[22px]">shopping_bag</span>
           <span id="cart-badge"
-            class="absolute -top-1 -right-1 bg-protein-accent text-white text-[10px] sm:text-[11px] font-bold w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shadow-xs">0</span>
+            class="absolute -top-1 -right-1 bg-protein-accent text-white text-[10px] sm:text-[11px] font-bold min-w-[18px] h-[18px] sm:min-w-[20px] sm:h-[20px] px-1 rounded-full flex items-center justify-center shadow-xs pointer-events-none">0</span>
         </button>
 
         <!-- Logged Out Controls -->
-        <div id="nav-logged-out" class="flex items-center gap-1.5 sm:gap-2.5">
+        <div id="nav-logged-out" class="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button id="nav-login-btn" onclick="openLoginModal()"
-            class="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary hover:bg-surface-card-warm px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-border-subtle hover:border-primary transition-all shrink-0">
+            class="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary bg-surface-card-warm/80 hover:bg-surface-card px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-border-subtle hover:border-primary transition-all shrink-0 whitespace-nowrap"
+            title="Member Log In">
             <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-carb-accent">person</span>
             <span class="hidden xs:inline">Log In</span>
           </button>
           <button onclick="navigateTo('page-home', 'plans')"
-            class="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-bold shadow-xs hover:bg-primary-container transition-all transform hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap">
+            class="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-bold shadow-xs hover:bg-primary-container transition-all transform hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap">
             <span>Choose Plan</span>
           </button>
         </div>
 
         <!-- Logged In Member Controls (Hidden by default, shown after sign-in) -->
-        <div id="nav-logged-in" class="hidden items-center gap-2 sm:gap-3">
+        <div id="nav-logged-in" class="hidden items-center gap-1.5 sm:gap-2 shrink-0">
           <button onclick="openTrackingModal()"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-surface-card-warm hover:bg-surface-card border border-border-subtle text-primary text-xs font-bold transition-all shadow-xs"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-surface-card-warm hover:bg-surface-card border border-border-subtle text-primary text-xs font-bold transition-all shadow-xs shrink-0"
             title="Track Live Deliveries">
             <span class="material-symbols-outlined text-[18px] text-carb-accent">receipt_long</span>
-            <span class="hidden sm:inline">Orders</span>
+            <span class="hidden md:inline">Orders</span>
           </button>
           <div onclick="showPage('page-dashboard')"
-            class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-card border border-border-subtle hover:border-secondary cursor-pointer transition-all shadow-xs"
+            class="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2.5 py-1 rounded-full bg-surface-card border border-border-subtle hover:border-secondary cursor-pointer transition-all shadow-xs shrink-0"
             title="Go to Member Dashboard">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
               alt="Arjun Sharma"
-              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-carb-accent/60">
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-carb-accent/60 shrink-0">
             <div class="hidden sm:flex flex-col text-left text-[11px] leading-tight">
               <span class="font-bold text-primary" id="nav-user-name">Arjun Sharma</span>
               <span class="text-carb-accent font-semibold text-[10px]">Active &bull; 8 Meals</span>
             </div>
           </div>
           <button onclick="performLogout()"
-            class="p-2 rounded-full text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors"
+            class="hidden sm:inline-flex p-2 rounded-full text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors shrink-0"
             title="Log Out">
             <span class="material-symbols-outlined text-[20px]">logout</span>
           </button>
         </div>
 
-        <!-- Mobile Hamburger Toggle -->
+        <!-- Mobile Hamburger Toggle (3 bars) -->
         <button onclick="toggleMobileMenu()"
-          class="md:hidden p-2 rounded-lg text-primary hover:bg-surface-card-warm focus:outline-none"
-          aria-label="Toggle Navigation">
-          <span class="material-symbols-outlined text-[26px]" id="hamburger-icon">menu</span>
+          class="md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-primary bg-surface-card-warm/80 hover:bg-surface-card border border-border-subtle focus:outline-none shrink-0"
+          aria-label="Toggle Navigation" title="Toggle Navigation Menu">
+          <span class="material-symbols-outlined text-[22px]" id="hamburger-icon">menu</span>
         </button>
 
       </div>
@@ -431,38 +433,38 @@
     <!-- Mobile Navigation Dropdown -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-border-subtle px-6 py-5 shadow-lg">
       <div class="flex flex-col gap-3">
-        <a href="javascript:void(0)" onclick="navigateTo('page-home', 'menu'); toggleMobileMenu()"
+        <a href="javascript:void(0)" onclick="navigateTo('page-home', 'menu'); toggleMobileMenu(true)"
           class="text-base font-bold text-primary py-2 border-b border-border-subtle/50 flex items-center gap-2.5">
           <span class="material-symbols-outlined text-carb-accent text-[20px]">restaurant_menu</span>
           <span>This Week's Menu</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('page-science'); toggleMobileMenu()"
+        <a href="javascript:void(0)" onclick="showPage('page-science'); toggleMobileMenu(true)"
           class="text-base font-semibold text-on-surface-variant hover:text-primary py-2 border-b border-border-subtle/50 flex items-center gap-2.5">
           <span class="material-symbols-outlined text-carb-accent text-[20px]">analytics</span>
           <span>Science &amp; Scoring</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('page-sourcing'); toggleMobileMenu()"
+        <a href="javascript:void(0)" onclick="showPage('page-sourcing'); toggleMobileMenu(true)"
           class="text-base font-semibold text-on-surface-variant hover:text-primary py-2 border-b border-border-subtle/50 flex items-center gap-2.5">
           <span class="material-symbols-outlined text-carb-accent text-[20px]">agriculture</span>
           <span>Farm Sourcing</span>
         </a>
-        <a href="javascript:void(0)" onclick="showPage('page-dashboard'); toggleMobileMenu()"
+        <a href="javascript:void(0)" onclick="showPage('page-dashboard'); toggleMobileMenu(true)"
           class="text-base font-semibold text-on-surface-variant hover:text-primary py-2 border-b border-border-subtle/50 flex items-center gap-2.5">
           <span class="material-symbols-outlined text-carb-accent text-[20px]">dashboard</span>
           <span>Member Dashboard</span>
         </a>
         <div class="pt-2 flex flex-col gap-2.5">
-          <button id="mobile-login-btn" onclick="openLoginModal(); toggleMobileMenu()"
+          <button id="mobile-login-btn" onclick="openLoginModal(); toggleMobileMenu(true)"
             class="w-full py-2.5 rounded-full border border-primary text-primary font-semibold text-sm flex items-center justify-center gap-2">
             <span class="material-symbols-outlined text-[18px]">person</span>
             Member Log In
           </button>
-          <button id="mobile-logout-btn" onclick="performLogout(); toggleMobileMenu()"
+          <button id="mobile-logout-btn" onclick="performLogout(); toggleMobileMenu(true)"
             class="hidden w-full py-2.5 rounded-full border border-red-300 text-red-600 font-semibold text-sm flex items-center justify-center gap-2">
             <span class="material-symbols-outlined text-[18px]">logout</span>
             Log Out
           </button>
-          <button onclick="navigateTo('page-home', 'plans'); toggleMobileMenu()"
+          <button onclick="navigateTo('page-home', 'plans'); toggleMobileMenu(true)"
             class="w-full py-2.5 rounded-full bg-primary text-white font-bold text-sm shadow-md">
             Choose Your Plan &rarr;
           </button>
@@ -3815,10 +3817,18 @@
       }
     }
 
-    function toggleMobileMenu() {
+    function toggleMobileMenu(forceClose) {
       var menu = document.getElementById('mobile-menu');
+      var icon = document.getElementById('hamburger-icon');
       if (menu) {
-        menu.classList.toggle('hidden');
+        if (forceClose === true) {
+          menu.classList.add('hidden');
+        } else {
+          menu.classList.toggle('hidden');
+        }
+        if (icon) {
+          icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+        }
       }
     }
 
