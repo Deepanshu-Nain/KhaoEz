@@ -2444,27 +2444,48 @@
           <span>Back to This Week's Menu</span>
         </button>
       </div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 flex flex-col gap-8">
+      <!-- Logged Out Member Login Prompt (Visible when not signed in) -->
+      <div id="dash-logged-out-prompt" class="hidden max-w-lg mx-auto py-16 sm:py-24 px-4 text-center flex-col items-center gap-5">
+        <div class="w-16 h-16 rounded-3xl bg-secondary-container flex items-center justify-center text-primary shadow-xs">
+          <span class="material-symbols-outlined text-[34px] text-carb-accent">lock</span>
+        </div>
+        <div>
+          <h2 class="font-headline text-2xl sm:text-3xl font-bold text-primary">Member Portal Login</h2>
+          <p class="text-sm text-text-muted mt-2 leading-relaxed">
+            Please sign in to view your dashboard, customize your upcoming box meals, manage delivery dates, and track orders.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button onclick="openLoginModal()" class="btn-bounce px-6 py-3 rounded-full bg-primary text-white font-bold text-sm hover:bg-primary-container transition-all shadow-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">person</span>
+            Sign In / Register
+          </button>
+          <button onclick="showPage('page-home')" class="btn-bounce px-5 py-3 rounded-full border border-border-subtle bg-surface-card hover:bg-surface-card-warm text-primary font-bold text-sm transition-all">
+            Browse Menu First
+          </button>
+        </div>
+      </div>
+
+      <!-- Logged In Content Container -->
+      <div id="dash-logged-in-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 flex flex-col gap-8">
 
         <!-- Welcome Member Banner -->
         <div
           class="bg-surface-card rounded-3xl p-6 sm:p-8 shadow-sm border border-border-subtle flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-              <span
+              <span id="dash-member-status"
                 class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold">
                 <span class="w-2 h-2 rounded-full bg-secondary"></span> Active Subscriber
               </span>
-              <span class="px-3 py-1 rounded-full bg-surface-card-warm text-on-surface-variant text-xs font-semibold">
+              <span id="dash-plan-badge" class="px-3 py-1 rounded-full bg-surface-card-warm text-on-surface-variant text-xs font-semibold">
                 8 Meals / Week Plan
               </span>
             </div>
-            <h1 class="font-headline text-2xl sm:text-3xl font-bold text-primary tracking-tight mt-1">Welcome back,
-              Priya Sharma</h1>
-            <p class="text-xs sm:text-sm text-text-muted flex items-center gap-1.5">
+            <h1 class="font-headline text-2xl sm:text-3xl font-bold text-primary tracking-tight mt-1">Welcome back, <span id="dash-user-name">Member</span></h1>
+            <p class="text-xs sm:text-sm text-text-muted flex items-center gap-1.5" id="dash-next-delivery-wrapper">
               <span class="material-symbols-outlined text-[18px] text-carb-accent">schedule</span>
-              Next Delivery: <strong class="text-primary font-bold">Wednesday, 8:00 AM " 1:00 PM</strong> (Cutoff
-              locks in 28 hrs)
+              Next Delivery: <span id="dash-next-delivery"><strong class="text-primary font-bold">Wednesday, 8:00 AM - 1:00 PM</strong></span>
             </p>
           </div>
 
@@ -2477,7 +2498,7 @@
               class="px-3.5 py-2.5 rounded-full bg-surface-card-warm hover:bg-surface-container-high/60 text-primary font-bold text-xs transition-colors flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[18px]">pause_circle</span> Skip Week
             </button>
-            <button onclick="openTrackingModal()"
+            <button onclick="openTrackingModal()" id="dash-track-btn"
               class="px-4 py-2.5 rounded-full bg-secondary-container text-primary font-bold text-xs hover:bg-carb-accent hover:text-white transition-all flex items-center gap-1.5 shadow-xs">
               <span class="material-symbols-outlined text-[18px]">local_shipping</span> Track Delivery
             </button>
@@ -3771,6 +3792,11 @@
 
     // Navigation between Pages & Tab Switching
     function showPage(pageId) {
+      if (pageId === 'page-dashboard' && !isLoggedIn) {
+        openLoginModal();
+        showToast('Please log in or sign up first to access your Member Dashboard.');
+        return;
+      }
       document.querySelectorAll('.page').forEach(function(page) {
         page.classList.remove('active');
       });
@@ -3778,6 +3804,9 @@
       if (targetPage) {
         targetPage.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (pageId === 'page-dashboard') {
+        updateDashboardUI();
       }
 
       // Update Active Tab styling on the Topbar Tabs
@@ -4425,46 +4454,32 @@
     // =========================================================================
 
     // User Profile Management (persisted in localStorage)
-    var defaultUser = {
-      name: 'Arjun Sharma',
-      email: 'arjun.sharma@gmail.com',
-      phone: '+91 98915 94230',
-      address: 'B-402, Green Glen Terai, Golf Course Rd, Gurugram, Delhi NCR',
-      plan: '8 Meals / Week Plan',
-      amount: 2199
-    };
-
     var currentUser = null;
+    var isLoggedIn = false;
+
     try {
-      currentUser = JSON.parse(localStorage.getItem('khaoezy_user'));
-    } catch(e) {}
-    if (!currentUser || !currentUser.name) currentUser = defaultUser;
-
-    var isLoggedIn = localStorage.getItem('khaoezy_logged_in') === 'true';
-
-    // Active Delivery Order & Lifecycle State
-    var defaultOrder = {
-      id: '#KE-DELHI-84920',
-      date: 'Wednesday, Nov 6',
-      plan: '8 Meals / Week',
-      amount: 2199,
-      address: currentUser.address,
-      phone: currentUser.phone,
-      slot: 'Wednesday Morning (8:00 AM - 1:00 PM)',
-      step: 2, // Live active step: Chef Prepping
-      createdTime: Date.now() - 30000,
-      driver: {
-        name: 'Rajesh Kumar',
-        phone: '+91 98915 94230',
-        vehicle: 'Refrigerated EV Van (DL-1EA-4921)'
+      isLoggedIn = localStorage.getItem('khaoezy_logged_in') === 'true';
+      if (isLoggedIn) {
+        currentUser = JSON.parse(localStorage.getItem('khaoezy_user'));
       }
-    };
+    } catch(e) {
+      isLoggedIn = false;
+      currentUser = null;
+    }
 
+    // Active Delivery Order (Only exists if user actually placed an order!)
     var activeDeliveryOrder = null;
-    try {
-      activeDeliveryOrder = JSON.parse(localStorage.getItem('khaoezy_active_order'));
-    } catch(e) {}
-    if (!activeDeliveryOrder || !activeDeliveryOrder.id) activeDeliveryOrder = defaultOrder;
+    if (isLoggedIn) {
+      try {
+        var storedOrder = JSON.parse(localStorage.getItem('khaoezy_active_order'));
+        // Clean up legacy hardcoded mock order (#KE-DELHI-84920) if not placed by actual user
+        if (storedOrder && storedOrder.id === '#KE-DELHI-84920' && !localStorage.getItem('khaoezy_user_has_ordered')) {
+          localStorage.removeItem('khaoezy_active_order');
+        } else if (storedOrder && storedOrder.id) {
+          activeDeliveryOrder = storedOrder;
+        }
+      } catch(e) {}
+    }
 
     var deliveryTimer = null;
 
@@ -4543,7 +4558,25 @@
       showToast('Signing in to member account...');
       setTimeout(function() {
         isLoggedIn = true;
-        currentUser.email = email;
+        var savedUser = null;
+        try {
+          savedUser = JSON.parse(localStorage.getItem('khaoezy_user'));
+        } catch(e) {}
+
+        if (savedUser && savedUser.email === email) {
+          currentUser = savedUser;
+        } else {
+          var namePart = email.indexOf('arjun') !== -1 ? 'Arjun Sharma' : email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+          currentUser = {
+            name: namePart || 'Member',
+            email: email,
+            phone: '+91 98915 94230',
+            address: 'B-402, Green Glen Terai, Golf Course Rd, Gurugram, Delhi NCR',
+            plan: null,
+            amount: 0
+          };
+        }
+
         try {
           localStorage.setItem('khaoezy_logged_in', 'true');
           localStorage.setItem('khaoezy_user', JSON.stringify(currentUser));
@@ -4551,11 +4584,12 @@
 
         closeLoginModal();
         updateAuthUI();
-        showToast('Welcome back, ' + currentUser.name + '! Taking you to your dashboard...');
+        updateDashboardUI();
+        showToast('Welcome back, ' + currentUser.name + '! You are now signed in.');
         setTimeout(function() {
           showPage('page-dashboard');
-        }, 500);
-      }, 700);
+        }, 400);
+      }, 500);
     }
 
     function performSignup() {
@@ -4585,8 +4619,8 @@
           email: email,
           phone: phone,
           address: (addr ? addr + ', ' : '') + area,
-          plan: selectedPlan + ' Meals / Week Plan',
-          amount: planWeeklyPrice
+          plan: null,
+          amount: 0
         };
         isLoggedIn = true;
         try {
@@ -4596,19 +4630,30 @@
 
         closeLoginModal();
         updateAuthUI();
+        updateDashboardUI();
         showToast('Welcome to KhaoEzy, ' + name + '! Your account is active.');
         setTimeout(function() {
           showPage('page-dashboard');
-        }, 600);
-      }, 800);
+        }, 400);
+      }, 500);
     }
 
     function performLogout() {
       isLoggedIn = false;
+      currentUser = null;
+      activeDeliveryOrder = null;
+      if (deliveryTimer) {
+        clearTimeout(deliveryTimer);
+        deliveryTimer = null;
+      }
       try {
-        localStorage.setItem('khaoezy_logged_in', 'false');
+        localStorage.removeItem('khaoezy_logged_in');
+        localStorage.removeItem('khaoezy_user');
+        localStorage.removeItem('khaoezy_active_order');
+        localStorage.removeItem('khaoezy_user_has_ordered');
       } catch(e) {}
       updateAuthUI();
+      updateDashboardUI();
       showToast('You have been logged out.');
       showPage('page-home');
     }
@@ -4621,10 +4666,10 @@
       var mobileLogout = document.getElementById('mobile-logout-btn');
 
       if (userNameEl && currentUser) {
-        userNameEl.textContent = currentUser.name;
+        userNameEl.textContent = currentUser.name || 'Member';
       }
 
-      if (isLoggedIn) {
+      if (isLoggedIn && currentUser) {
         if (loggedOutGroup) loggedOutGroup.classList.add('hidden');
         if (loggedInGroup) {
           loggedInGroup.classList.remove('hidden');
@@ -4643,10 +4688,72 @@
       }
     }
 
+    function updateDashboardUI() {
+      var loggedInContent = document.getElementById('dash-logged-in-content');
+      var loggedOutPrompt = document.getElementById('dash-logged-out-prompt');
+      var dashUserName = document.getElementById('dash-user-name');
+      var dashPlanBadge = document.getElementById('dash-plan-badge');
+      var dashNextDelivery = document.getElementById('dash-next-delivery');
+      var dashMemberStatus = document.getElementById('dash-member-status');
+      var dashTrackBtn = document.getElementById('dash-track-btn');
+
+      if (!isLoggedIn || !currentUser) {
+        if (loggedInContent) loggedInContent.classList.add('hidden');
+        if (loggedOutPrompt) {
+          loggedOutPrompt.classList.remove('hidden');
+          loggedOutPrompt.classList.add('flex');
+        }
+        return;
+      }
+
+      if (loggedInContent) loggedInContent.classList.remove('hidden');
+      if (loggedOutPrompt) {
+        loggedOutPrompt.classList.add('hidden');
+        loggedOutPrompt.classList.remove('flex');
+      }
+
+      if (dashUserName) dashUserName.textContent = currentUser.name || 'Member';
+
+      if (activeDeliveryOrder) {
+        if (dashPlanBadge) dashPlanBadge.textContent = activeDeliveryOrder.plan || (currentUser.plan || 'Active Plan');
+        if (dashMemberStatus) dashMemberStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-secondary"></span> Active Subscriber';
+        if (dashTrackBtn) {
+          dashTrackBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+          dashTrackBtn.title = 'Track your live delivery progression';
+        }
+        if (dashNextDelivery) {
+          var stepLabels = {
+            1: 'Order Confirmed - Kitchen Dispatch Scheduled',
+            2: 'Chef Prepping in Progress',
+            3: 'Packed & Chilled at Hub',
+            4: 'Out for Delivery (EV Chilled Van)',
+            5: 'Delivered to Doorstep'
+          };
+          var statusText = stepLabels[activeDeliveryOrder.step] || 'Processing';
+          dashNextDelivery.innerHTML = '<strong class="text-primary font-bold">' + activeDeliveryOrder.date + '</strong> (' + statusText + ')';
+        }
+      } else {
+        if (dashPlanBadge) dashPlanBadge.textContent = currentUser.plan || 'No Active Plan';
+        if (dashMemberStatus) dashMemberStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-carb-accent"></span> Registered Member';
+        if (dashTrackBtn) {
+          dashTrackBtn.title = 'No active deliveries to track';
+        }
+        if (dashNextDelivery) {
+          dashNextDelivery.innerHTML = '<span class="text-text-muted">No scheduled deliveries yet. <a href="javascript:void(0)" onclick="navigateTo(\'page-home\', \'plans\')" class="text-primary font-bold underline hover:text-secondary">Choose a Plan to Order</a></span>';
+        }
+      }
+    }
+
     // =========================================================================
     // CHECKOUT MODAL & REAL ORDER PLACEMENT
     // =========================================================================
     function openCheckoutModal(planMeals, price) {
+      if (!isLoggedIn || !currentUser) {
+        openLoginModal();
+        showToast('Please sign in or create an account to proceed with subscription checkout.');
+        return;
+      }
+
       var meals = planMeals || selectedPlan || '8';
       var total = price || planWeeklyPrice || 2199;
 
@@ -4663,9 +4770,9 @@
       if (totalPriceEl) totalPriceEl.textContent = 'Rs. ' + total.toLocaleString();
       if (btnTextEl) btnTextEl.textContent = 'Confirm Subscription & Place Order (Rs. ' + total.toLocaleString() + ')';
 
-      if (nameInput && currentUser) nameInput.value = currentUser.name;
-      if (phoneInput && currentUser) phoneInput.value = currentUser.phone;
-      if (addrInput && currentUser) addrInput.value = currentUser.address;
+      if (nameInput && currentUser) nameInput.value = currentUser.name || '';
+      if (phoneInput && currentUser) phoneInput.value = currentUser.phone || '';
+      if (addrInput && currentUser) addrInput.value = currentUser.address || '';
 
       var modal = document.getElementById('checkout-modal');
       if (modal) {
@@ -4690,6 +4797,7 @@
       var address = (document.getElementById('checkout-address') || {}).value || currentUser.address;
       var slot = (document.getElementById('checkout-slot') || {}).value || 'Wednesday Morning (8:00 AM - 1:00 PM)';
 
+      if (!currentUser) currentUser = {};
       currentUser.name = name;
       currentUser.phone = phone;
       currentUser.address = address;
@@ -4700,8 +4808,10 @@
       try {
         localStorage.setItem('khaoezy_user', JSON.stringify(currentUser));
         localStorage.setItem('khaoezy_logged_in', 'true');
+        localStorage.setItem('khaoezy_user_has_ordered', 'true');
       } catch(e) {}
       updateAuthUI();
+      updateDashboardUI();
 
       var btn = document.getElementById('btn-place-order');
       if (btn) {
@@ -4960,12 +5070,20 @@
       }
 
       // Update Chat Support auto-response dynamically
-                  showToast('[Out for Delivery] Order ' + activeDeliveryOrder.id + ': With Rajesh Kumar (EV Van DL-1EA-4921) - ETA 10 mins!');
       chatResponses['where is my order'] = 'Your order ' + activeDeliveryOrder.id + ' is currently at stage: "' + stepLabels[step] + '". Destination: ' + activeDeliveryOrder.address + '. Open the Track Delivery window anytime for real-time progress!';
     }
 
     // Open/Close Tracking Modal
     function openTrackingModal() {
+      if (!isLoggedIn) {
+        openLoginModal();
+        showToast('Please log in first to track your deliveries.');
+        return;
+      }
+      if (!activeDeliveryOrder) {
+        showToast('No active orders right now. Choose a meal plan to schedule your first delivery!');
+        return;
+      }
       updateDeliveryDOM();
       var modal = document.getElementById('tracking-modal');
       if (modal) {
@@ -6327,7 +6445,10 @@
     document.addEventListener('DOMContentLoaded', function() {
       updateCartBadge();
       updateAuthUI();
-      startDeliveryLifecycle();
+      updateDashboardUI();
+      if (isLoggedIn && activeDeliveryOrder && activeDeliveryOrder.step < 5) {
+        startDeliveryLifecycle();
+      }
       initDashboardEnhancements();
     });
   </script>
