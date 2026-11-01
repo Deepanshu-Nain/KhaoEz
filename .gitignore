@@ -1,0 +1,15 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary and Scratch Files
+*.tmp
+*.log
+*.pyc
+__pycache__/
+
+# Local Environment
+.env
+.vscode/
+.idea/
