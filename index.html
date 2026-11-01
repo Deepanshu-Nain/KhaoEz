@@ -1398,7 +1398,14 @@
 
           <div class="p-1 sm:p-1.5 rounded-2xl sm:rounded-full bg-surface-card-warm border border-border-subtle inline-flex flex-wrap sm:flex-nowrap justify-center gap-1 shadow-xs max-w-full overflow-x-auto no-scrollbar touch-pan-x" id="plan-routine-selector">
             
-            <!-- Option 1: Lunch & Dinner (Default / Complete) -->
+            <!-- Option 1: All 3 Meals (Breakfast, Lunch & Dinner) -->
+            <button type="button" onclick="setMealRoutine('all_three')" id="routine-btn-all_three"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">restaurant_menu</span>
+              <span>All 3 Meals (Breakfast, Lunch &amp; Dinner)</span>
+            </button>
+
+            <!-- Option 2: Lunch & Dinner (Default / Complete) -->
             <button type="button" onclick="setMealRoutine('lunch_dinner')" id="routine-btn-lunch_dinner"
               class="routine-tab is-active px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
               <span class="material-symbols-outlined text-[16px]">restaurant</span>
@@ -3049,6 +3056,7 @@
                 <label class="text-xs font-bold text-on-surface-variant">Daily Meal Coverage Routine</label>
                 <select id="dash-routine-select" onchange="setMealRoutine(this.value)"
                   class="p-2.5 rounded-xl border border-border-subtle bg-surface-card-warm text-xs font-bold text-primary focus:outline-none focus:border-primary transition-colors cursor-pointer">
+                  <option value="all_three">All 3 Meals (Breakfast, Lunch &amp; Dinner)</option>
                   <option value="lunch_dinner">Both Lunch &amp; Dinner</option>
                   <option value="lunch_only">Only Lunch Plan</option>
                   <option value="dinner_only">Only Dinner Plan</option>
@@ -3061,12 +3069,13 @@
               <!-- Meals per week selector in dashboard -->
               <div class="flex flex-col gap-2">
                 <label class="text-xs font-bold text-on-surface-variant">Meals per Week</label>
-                <div class="grid grid-cols-5 gap-1.5 p-1 rounded-xl bg-surface-card-warm border border-border-subtle" id="dash-meals-selector">
+                <div class="grid grid-cols-6 gap-1.5 p-1 rounded-xl bg-surface-card-warm border border-border-subtle" id="dash-meals-selector">
                   <button onclick="selectDashboardPlanSize(6, 479, 79)" id="dash-size-6" class="py-2 text-center rounded-lg text-xs font-bold text-on-surface hover:bg-surface-card transition-colors">6</button>
                   <button onclick="selectDashboardPlanSize(8, 599, 74)" id="dash-size-8" class="py-2 text-center rounded-lg text-xs font-bold bg-primary text-white shadow-xs">8</button>
                   <button onclick="selectDashboardPlanSize(10, 699, 69)" id="dash-size-10" class="py-2 text-center rounded-lg text-xs font-bold text-on-surface hover:bg-surface-card transition-colors">10</button>
                   <button onclick="selectDashboardPlanSize(12, 799, 66)" id="dash-size-12" class="py-2 text-center rounded-lg text-xs font-bold text-on-surface hover:bg-surface-card transition-colors">12</button>
                   <button onclick="selectDashboardPlanSize(14, 899, 64)" id="dash-size-14" class="py-2 text-center rounded-lg text-xs font-bold text-on-surface hover:bg-surface-card transition-colors">14</button>
+                  <button onclick="selectDashboardPlanSize(21, 1299, 61)" id="dash-size-21" class="py-2 text-center rounded-lg text-xs font-bold text-on-surface hover:bg-surface-card transition-colors" title="21 Meals: 3 Times Daily for 7 Days">21</button>
                 </div>
               </div>
 
@@ -4122,6 +4131,14 @@
     // Configurable Weekly Meal Coverage Routines
     var currentRoutine = 'lunch_dinner';
     var ROUTINE_CONFIGS = {
+      'all_three': {
+        name: 'All 3 Meals (Breakfast, Lunch & Dinner)',
+        shortName: '3 Times Daily (B+L+D)',
+        p6: { label: '2 Days All 3 Meals', title: 'Weekend 3-Meal Pack', desc: '2 full days covered: Breakfast, Lunch & Dinner delivered chilled with zero grocery shopping or kitchen prep.' },
+        p8: { label: '3 Days All 3 Meals', title: '3-Day Full Nutrition Box', desc: 'Breakfast, lunch, and dinner for your 3 busiest days with clean, energizing Vedic macros.' },
+        p10: { label: 'Workweek All 3 Meals', title: 'Workweek 3-Meal Complete', desc: 'Monday-to-Friday fully covered for all 3 daily meals. Never worry about cooking or cleanup on workdays.' },
+        p14: { label: '7 Days All 3 Meals', title: 'All-Week 3-Meal Reset', desc: 'Complete daily breakfast, lunch, and dinner coverage for the whole week with seasonal chef variety.' }
+      },
       'lunch_dinner': {
         name: 'Both Lunch & Dinner',
         shortName: 'Lunch & Dinner',
