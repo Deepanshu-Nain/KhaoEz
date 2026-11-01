@@ -56,6 +56,30 @@
 
     /* Touch & Mobile Responsiveness Enhancements */
     /* Mobile Active Tab Fix: Guarantee white text when active so green background never hides label */
+    .routine-tab {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .routine-tab.is-active,
+    .routine-tab.bg-primary,
+    button.routine-tab.bg-primary {
+      background-color: #0c412d !important;
+      color: #ffffff !important;
+    }
+    .routine-tab.is-active *,
+    .routine-tab.bg-primary * {
+      color: #ffffff !important;
+    }
+    .routine-tab.is-active:hover,
+    .routine-tab.is-active:focus,
+    .routine-tab.is-active:active,
+    .routine-tab.bg-primary:hover,
+    .routine-tab.bg-primary:focus,
+    .routine-tab.bg-primary:active {
+      background-color: #0c412d !important;
+      color: #ffffff !important;
+    }
+
     .meal-tab-btn {
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
@@ -64,6 +88,10 @@
     .meal-tab-btn.bg-primary,
     button.meal-tab-btn.bg-primary {
       background-color: #0c412d !important;
+      color: #ffffff !important;
+    }
+    .meal-tab-btn.is-active *,
+    .meal-tab-btn.bg-primary * {
       color: #ffffff !important;
     }
     .meal-tab-btn.is-active:hover,
@@ -414,10 +442,10 @@
         <!-- Logged Out Controls -->
         <div id="nav-logged-out" class="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button id="nav-login-btn" onclick="openLoginModal()"
-            class="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary bg-surface-card-warm/80 hover:bg-surface-card px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-border-subtle hover:border-primary transition-all shrink-0 whitespace-nowrap"
+            class="w-9 h-9 sm:w-auto px-0 sm:px-3.5 py-0 sm:py-2 rounded-full bg-surface-card-warm/80 hover:bg-surface-card text-primary font-semibold text-xs sm:text-sm border border-border-subtle hover:border-primary transition-all flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap"
             title="Member Log In">
-            <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-carb-accent">person</span>
-            <span class="hidden xs:inline">Log In</span>
+            <span class="material-symbols-outlined text-[19px] sm:text-[18px] text-carb-accent">person</span>
+            <span class="hidden sm:inline">Log In</span>
           </button>
           <button onclick="navigateTo('page-home', 'plans')"
             class="hidden lg:inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-bold shadow-xs hover:bg-primary-container transition-all transform hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap">
@@ -1361,19 +1389,57 @@
           </p>
         </div>
 
-        <!-- Household Size Filter Tabs (Like HelloFresh / Blue Apron) -->
-        <div class="flex items-center justify-center gap-2 mb-8 sm:mb-10 px-2">
-          <div class="p-1 rounded-full bg-surface-card-warm border border-border-subtle inline-flex shadow-xs max-w-full overflow-x-auto no-scrollbar" id="plan-household-toggle">
-            <button type="button" onclick="setHouseholdSize('couple')" id="tab-hh-couple"
-              class="hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
-              <span class="material-symbols-outlined text-[16px]">groups</span>
-              <span>2 People <span class="hidden sm:inline">(Couples &amp; Family)</span></span>
+        <!-- Configurable Meal Routine Selector (Replaces "for 2 people") -->
+        <div class="flex flex-col items-center justify-center gap-3 mb-8 sm:mb-10 w-full px-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-card-warm border border-border-subtle text-text-muted text-xs font-bold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-carb-accent animate-pulse"></span>
+            Configure Daily Meal Coverage
+          </div>
+
+          <div class="p-1 sm:p-1.5 rounded-2xl sm:rounded-full bg-surface-card-warm border border-border-subtle inline-flex flex-wrap sm:flex-nowrap justify-center gap-1 shadow-xs max-w-full overflow-x-auto no-scrollbar touch-pan-x" id="plan-routine-selector">
+            
+            <!-- Option 1: Lunch & Dinner (Default / Complete) -->
+            <button type="button" onclick="setMealRoutine('lunch_dinner')" id="routine-btn-lunch_dinner"
+              class="routine-tab is-active px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">restaurant</span>
+              <span>Both Lunch &amp; Dinner</span>
             </button>
-            <button type="button" onclick="setHouseholdSize('individual')" id="tab-hh-individual"
-              class="hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
-              <span class="material-symbols-outlined text-[16px]">person</span>
-              <span>1 Person <span class="hidden sm:inline">(Individual)</span></span>
+
+            <!-- Option 2: Only Lunch -->
+            <button type="button" onclick="setMealRoutine('lunch_only')" id="routine-btn-lunch_only"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">lunch_dining</span>
+              <span>Only Lunch</span>
             </button>
+
+            <!-- Option 3: Only Dinner -->
+            <button type="button" onclick="setMealRoutine('dinner_only')" id="routine-btn-dinner_only"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">dinner_dining</span>
+              <span>Only Dinner</span>
+            </button>
+
+            <!-- Option 4: Only Breakfast -->
+            <button type="button" onclick="setMealRoutine('breakfast_only')" id="routine-btn-breakfast_only"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">wb_twilight</span>
+              <span>Only Breakfast</span>
+            </button>
+
+            <!-- Option 5: Breakfast & Lunch -->
+            <button type="button" onclick="setMealRoutine('breakfast_lunch')" id="routine-btn-breakfast_lunch"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">brunch_dining</span>
+              <span>Both Breakfast &amp; Lunch</span>
+            </button>
+
+            <!-- Option 6: Breakfast & Dinner -->
+            <button type="button" onclick="setMealRoutine('breakfast_dinner')" id="routine-btn-breakfast_dinner"
+              class="routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">hotel_class</span>
+              <span>Both Breakfast &amp; Dinner</span>
+            </button>
+
           </div>
         </div>
 
@@ -1381,20 +1447,20 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
 
           <!-- Plan 1: 6 Meals / Week -->
-          <div id="plan-card-6meals" onclick="selectPlan('6meals', 1799, 6, 299, 'Weekday Starter')"
+          <div id="plan-card-6meals" onclick="selectPlan('6meals', 1799, 6, 299, 'Weekday Lunch &amp; Dinner')"
             class="plan-card group bg-surface-card p-6 rounded-3xl border-2 border-border-subtle cursor-pointer transition-all duration-300 hover:border-primary hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-between gap-6 shadow-xs relative">
             <div class="flex flex-col gap-2.5">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full bg-surface-card-warm border border-border-subtle text-primary font-bold text-[10px] uppercase tracking-wider">
                   Starter Tier
                 </span>
-                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-6">3 Dinners for 2</span>
+                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-6">3 Lunches + 3 Dinners</span>
               </div>
-              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors">
-                Weekday Starter
+              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors" id="hh-title-6">
+                Weekday Lunch &amp; Dinner
               </h3>
               <p class="text-xs text-text-muted leading-relaxed" id="hh-desc-6">
-                Perfect for 3 dinners for two or supplementing your home cooking during busy workdays.
+                3 wholesome lunches + 3 wholesome dinners delivered chilled. Perfect to sort your busiest workdays.
               </p>
               
               <!-- Features Checklist -->
@@ -1422,20 +1488,20 @@
           </div>
 
           <!-- Plan 2: 8 Meals / Week (Most Popular) -->
-          <div id="plan-card-8meals" onclick="selectPlan('8meals', 2199, 8, 274, 'Classic Couples Box')"
+          <div id="plan-card-8meals" onclick="selectPlan('8meals', 2199, 8, 274, 'Classic Lunch &amp; Dinner Box')"
             class="plan-card plan-card-active group bg-surface-card p-6 rounded-3xl border-2 border-primary cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col justify-between gap-6 relative shadow-xl ring-2 ring-primary/20 scale-[1.02]">
             <div class="flex flex-col gap-2.5">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-primary font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1">
                   <span class="material-symbols-outlined text-[12px] text-carb-accent">star</span> Most Popular &bull; Save 8%
                 </span>
-                <span class="text-[11px] font-bold text-primary" id="hh-label-8">4 Dinners for 2</span>
+                <span class="text-[11px] font-bold text-primary" id="hh-label-8">4 Lunches + 4 Dinners</span>
               </div>
-              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors">
-                Classic Couples Box
+              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors" id="hh-title-8">
+                Classic Lunch &amp; Dinner Box
               </h3>
               <p class="text-xs text-text-muted leading-relaxed" id="hh-desc-8">
-                The gold-standard weekly harvest: 4 wholesome dinners for two with balanced macros and fresh farm veggies.
+                Our signature gold-standard: 4 energizing lunches + 4 chef-crafted dinners with clean Vedic macros.
               </p>
 
               <!-- Features Checklist -->
@@ -1470,13 +1536,13 @@
                 <span class="px-2.5 py-0.5 rounded-full bg-surface-card-warm border border-border-subtle text-primary font-bold text-[10px] uppercase tracking-wider">
                   Workweek &bull; Save 13%
                 </span>
-                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-10">5 Dinners for 2</span>
+                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-10">5 Lunches + 5 Dinners</span>
               </div>
-              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors">
-                Workweek Complete
+              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors" id="hh-title-10">
+                Complete Workweek Sorted
               </h3>
               <p class="text-xs text-text-muted leading-relaxed" id="hh-desc-10">
-                Complete Monday-to-Friday lunch &amp; dinner sorted. Zero cooking or kitchen cleanup on work days.
+                Monday-to-Friday fully covered for both midday lunch and evening dinner. Zero cooking or kitchen cleanup.
               </p>
 
               <!-- Features Checklist -->
@@ -1504,20 +1570,20 @@
           </div>
 
           <!-- Plan 4: 14 Meals / Week -->
-          <div id="plan-card-14meals" onclick="selectPlan('14meals', 3299, 14, 235, 'All-Week Transformation')"
+          <div id="plan-card-14meals" onclick="selectPlan('14meals', 3299, 14, 235, 'All-Week Full Transformation')"
             class="plan-card group bg-surface-card p-6 rounded-3xl border-2 border-border-subtle cursor-pointer transition-all duration-300 hover:border-primary hover:-translate-y-1.5 hover:shadow-xl flex flex-col justify-between gap-6 shadow-xs relative">
             <div class="flex flex-col gap-2.5">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-full bg-accent-lime/40 text-primary font-extrabold text-[10px] uppercase tracking-wider">
                   Best Value &bull; Save 21%
                 </span>
-                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-14">7 Dinners for 2</span>
+                <span class="text-[11px] font-semibold text-text-muted" id="hh-label-14">7 Lunches + 7 Dinners</span>
               </div>
-              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors">
-                All-Week Health Reset
+              <h3 class="font-headline text-xl sm:text-2xl font-bold text-primary group-hover:text-secondary transition-colors" id="hh-title-14">
+                All-Week Full Transformation
               </h3>
               <p class="text-xs text-text-muted leading-relaxed" id="hh-desc-14">
-                Full 7-day culinary wellness transformation. Lunch and dinner everyday without grocery stress.
+                Complete 7-day culinary wellness reset: farm-fresh lunch and dinner every day without grocery trips.
               </p>
 
               <!-- Features Checklist -->
@@ -2982,6 +3048,20 @@
                 </span>
               </div>
 
+              <!-- Daily Meal Routine Coverage in Dashboard -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-on-surface-variant">Daily Meal Coverage Routine</label>
+                <select id="dash-routine-select" onchange="setMealRoutine(this.value)"
+                  class="p-2.5 rounded-xl border border-border-subtle bg-surface-card-warm text-xs font-bold text-primary focus:outline-none focus:border-primary transition-colors cursor-pointer">
+                  <option value="lunch_dinner">Both Lunch &amp; Dinner</option>
+                  <option value="lunch_only">Only Lunch Plan</option>
+                  <option value="dinner_only">Only Dinner Plan</option>
+                  <option value="breakfast_only">Only Breakfast Plan</option>
+                  <option value="breakfast_lunch">Both Breakfast &amp; Lunch</option>
+                  <option value="breakfast_dinner">Both Breakfast &amp; Dinner</option>
+                </select>
+              </div>
+
               <!-- Meals per week selector in dashboard -->
               <div class="flex flex-col gap-2">
                 <label class="text-xs font-bold text-on-surface-variant">Meals per Week</label>
@@ -4043,68 +4123,112 @@
       }, 200);
     }
 
-    // Weekly Plan Selector on Home Page
-    var currentHousehold = 'couple';
-    var planTitles = {
-      '6meals': 'Weekday Starter (6 Meals / Week)',
-      '8meals': 'Classic Couples Box (8 Meals / Week)',
-      '10meals': 'Workweek Complete (10 Meals / Week)',
-      '14meals': 'All-Week Health Reset (14 Meals / Week)'
+    // Configurable Weekly Meal Coverage Routines
+    var currentRoutine = 'lunch_dinner';
+    var ROUTINE_CONFIGS = {
+      'lunch_dinner': {
+        name: 'Both Lunch & Dinner',
+        shortName: 'Lunch & Dinner',
+        p6: { label: '3 Lunches + 3 Dinners', title: 'Weekday Lunch & Dinner', desc: '3 wholesome lunches + 3 wholesome dinners delivered chilled. Perfect to sort your busiest workdays.' },
+        p8: { label: '4 Lunches + 4 Dinners', title: 'Classic Lunch & Dinner Box', desc: 'Our signature gold-standard: 4 energizing lunches + 4 chef-crafted dinners with clean Vedic macros.' },
+        p10: { label: '5 Lunches + 5 Dinners', title: 'Complete Workweek Sorted', desc: 'Monday-to-Friday fully covered for both midday lunch and evening dinner. Zero cooking or kitchen cleanup.' },
+        p14: { label: '7 Lunches + 7 Dinners', title: 'All-Week Full Transformation', desc: 'Complete 7-day culinary wellness reset: farm-fresh lunch and dinner every day without grocery trips.' }
+      },
+      'lunch_only': {
+        name: 'Only Lunch Plan',
+        shortName: 'Only Lunch',
+        p6: { label: '6 Office Lunches', title: 'Mon-Sat Healthy Lunch Box', desc: '6 chef-crafted power lunches. Avoid heavy takeout and prevent post-lunch fatigue at work.' },
+        p8: { label: '8 Chef Lunches', title: 'Complete Midday Nutrition', desc: '8 hearty farm-to-table lunch bowls with high clean protein, complex lentils, and aged mountain rice.' },
+        p10: { label: '10 Office Lunches', title: 'Workweek Lunches for Two', desc: '5 healthy lunches for two people or two full weeks of weekday office lunches sorted.' },
+        p14: { label: '14 Daily Lunches', title: 'Everyday Lunch Supply', desc: 'Complete everyday lunch sorted for couples or 14 days of sustained clean office nutrition.' }
+      },
+      'dinner_only': {
+        name: 'Only Dinner Plan',
+        shortName: 'Only Dinner',
+        p6: { label: '6 Relaxed Dinners', title: 'Weekday Evening Dinners', desc: '6 wholesome dinners ready in 3 minutes after work. Zero prep, zero cooking, zero dishwashing.' },
+        p8: { label: '8 Farm Dinners', title: 'Classic Evening Feast Box', desc: '8 organic Indian evening dinners cooked in Vedic A2 Bilona ghee with zero industrial seed oils.' },
+        p10: { label: '5 Dinners for Two', title: "Couple's Workweek Dinners", desc: 'Monday to Friday dinner for two sorted. Come home to restaurant-grade farm meals with loved ones.' },
+        p14: { label: '7 Dinners for Two', title: "All-Week Couple's Dinner Reset", desc: 'Full 7-day dinner solution for two or 14 nights of pure, nourishing evening comfort.' }
+      },
+      'breakfast_only': {
+        name: 'Only Breakfast Plan',
+        shortName: 'Only Breakfast',
+        p6: { label: '6 Power Breakfasts', title: 'High-Protein Morning Box', desc: '6 energizing breakfasts (Gir paneer bhurji, sprouted parathas, idli-sambar) for peak morning focus.' },
+        p8: { label: '8 Morning Resets', title: 'Complete Breakfast Vitality', desc: '8 high-protein breakfasts packed with clean bio-available protein and low-glycemic fiber.' },
+        p10: { label: '5 Breakfasts for Two', title: "Couple's Morning Starter", desc: 'Monday-to-Friday healthy mornings for two. Never skip breakfast or rely on processed cereals again.' },
+        p14: { label: '7 Breakfasts for Two', title: 'All-Week Morning Feast', desc: 'Full 7 days of revitalizing breakfasts for two people. Start every day with chef-crafted nutrition.' }
+      },
+      'breakfast_lunch': {
+        name: 'Both Breakfast & Lunch',
+        shortName: 'Breakfast & Lunch',
+        p6: { label: '3 Breakfasts + 3 Lunches', title: 'Midday Morning Starter', desc: '3 energizing breakfasts + 3 wholesome lunches. Morning and afternoon nutrition sorted.' },
+        p8: { label: '4 Breakfasts + 4 Lunches', title: 'Classic Day-Shift Box', desc: '4 power breakfasts + 4 clean lunch bowls. Stay fueled from morning through afternoon peak hours.' },
+        p10: { label: '5 Breakfasts + 5 Lunches', title: 'Mon-Fri Workday Nutrition', desc: 'Monday-to-Friday breakfast and lunch covered. Arrive energized and power through your workday.' },
+        p14: { label: '7 Breakfasts + 7 Lunches', title: 'All-Week Morning & Lunch', desc: 'Full 7 days of chef breakfasts and lunch bowls. Perfect for busy professionals and athletes.' }
+      },
+      'breakfast_dinner': {
+        name: 'Both Breakfast & Dinner',
+        shortName: 'Breakfast & Dinner',
+        p6: { label: '3 Breakfasts + 3 Dinners', title: 'Start & End Strong', desc: '3 high-protein breakfasts to start your day + 3 comforting dinners to end it right.' },
+        p8: { label: '4 Breakfasts + 4 Dinners', title: 'Classic Bookend Box', desc: '4 energizing morning breakfasts + 4 wholesome evening dinners with balanced macros.' },
+        p10: { label: '5 Breakfasts + 5 Dinners', title: 'Workweek Breakfast & Dinner', desc: 'Monday-to-Friday breakfast before heading out and dinner when returning home. Complete home comfort.' },
+        p14: { label: '7 Breakfasts + 7 Dinners', title: 'All-Week Breakfast & Dinner', desc: 'Complete 7 days of morning fuel and evening comfort. Zero grocery shopping, pure health.' }
+      }
     };
 
-    function setHouseholdSize(type) {
-      currentHousehold = type;
-      var btnCouple = document.getElementById('tab-hh-couple');
-      var btnInd = document.getElementById('tab-hh-individual');
+    function setMealRoutine(routineKey) {
+      if (!ROUTINE_CONFIGS[routineKey]) return;
+      currentRoutine = routineKey;
+      var config = ROUTINE_CONFIGS[routineKey];
 
-      if (type === 'couple') {
-        if (btnCouple) {
-          btnCouple.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
-          btnCouple.style.setProperty('color', '#ffffff', 'important');
-          btnCouple.style.setProperty('background-color', '#0c412d', 'important');
-        }
-        if (btnInd) {
-          btnInd.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
-          btnInd.style.setProperty('color', '', '');
-          btnInd.style.setProperty('background-color', '', '');
-        }
+      // Update button styling across the 6 routine tabs
+      document.querySelectorAll('.routine-tab').forEach(function(btn) {
+        btn.className = 'routine-tab px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+        btn.style.setProperty('color', '', '');
+        btn.style.setProperty('background-color', '', '');
+      });
 
-        var l6 = document.getElementById('hh-label-6'); if (l6) l6.textContent = '3 Dinners for 2';
-        var d6 = document.getElementById('hh-desc-6'); if (d6) d6.textContent = 'Perfect for 3 dinners for two or supplementing your home cooking during busy workdays.';
-        var l8 = document.getElementById('hh-label-8'); if (l8) l8.textContent = '4 Dinners for 2';
-        var d8 = document.getElementById('hh-desc-8'); if (d8) d8.textContent = 'The gold-standard weekly harvest: 4 wholesome dinners for two with balanced macros and fresh farm veggies.';
-        var l10 = document.getElementById('hh-label-10'); if (l10) l10.textContent = '5 Dinners for 2';
-        var d10 = document.getElementById('hh-desc-10'); if (d10) d10.textContent = 'Complete Monday-to-Friday dinner sorted for couples. Zero grocery runs or kitchen cleanup.';
-        var l14 = document.getElementById('hh-label-14'); if (l14) l14.textContent = '7 Dinners for 2';
-        var d14 = document.getElementById('hh-desc-14'); if (d14) d14.textContent = 'Full 7-day culinary dinner reset. Fresh dinner every evening without cooking stress.';
-      } else {
-        if (btnCouple) {
-          btnCouple.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
-          btnCouple.style.setProperty('color', '', '');
-          btnCouple.style.setProperty('background-color', '', '');
-        }
-        if (btnInd) {
-          btnInd.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
-          btnInd.style.setProperty('color', '#ffffff', 'important');
-          btnInd.style.setProperty('background-color', '#0c412d', 'important');
-        }
-
-        var l6 = document.getElementById('hh-label-6'); if (l6) l6.textContent = '6 Lunches for 1';
-        var d6 = document.getElementById('hh-desc-6'); if (d6) d6.textContent = 'Mon to Sat healthy office lunches. Avoid heavy takeout and mid-afternoon energy crashes.';
-        var l8 = document.getElementById('hh-label-8'); if (l8) l8.textContent = '4 Lunches + 4 Dinners';
-        var d8 = document.getElementById('hh-desc-8'); if (d8) d8.textContent = 'The sweet spot for individual professionals: 4 full days of chef-crafted nutrition.';
-        var l10 = document.getElementById('hh-label-10'); if (l10) l10.textContent = '5 Days (L + D)';
-        var d10 = document.getElementById('hh-desc-10'); if (d10) d10.textContent = 'Zero cooking Monday to Friday: complete lunch & dinner delivered for your workweek.';
-        var l14 = document.getElementById('hh-label-14'); if (l14) l14.textContent = '7 Days (L + D)';
-        var d14 = document.getElementById('hh-desc-14'); if (d14) d14.textContent = 'Full weekly fitness fuel: 7 days of clinical macro-certified lunch and dinner.';
+      var activeBtn = document.getElementById('routine-btn-' + routineKey);
+      if (activeBtn) {
+        activeBtn.className = 'routine-tab is-active px-3.5 sm:px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+        activeBtn.style.setProperty('color', '#ffffff', 'important');
+        activeBtn.style.setProperty('background-color', '#0c412d', 'important');
       }
+
+      // Update Plan Card 6
+      var l6 = document.getElementById('hh-label-6'); if (l6) l6.textContent = config.p6.label;
+      var t6 = document.getElementById('hh-title-6'); if (t6) t6.textContent = config.p6.title;
+      var d6 = document.getElementById('hh-desc-6'); if (d6) d6.textContent = config.p6.desc;
+
+      // Update Plan Card 8
+      var l8 = document.getElementById('hh-label-8'); if (l8) l8.textContent = config.p8.label;
+      var t8 = document.getElementById('hh-title-8'); if (t8) t8.textContent = config.p8.title;
+      var d8 = document.getElementById('hh-desc-8'); if (d8) d8.textContent = config.p8.desc;
+
+      // Update Plan Card 10
+      var l10 = document.getElementById('hh-label-10'); if (l10) l10.textContent = config.p10.label;
+      var t10 = document.getElementById('hh-title-10'); if (t10) t10.textContent = config.p10.title;
+      var d10 = document.getElementById('hh-desc-10'); if (d10) d10.textContent = config.p10.desc;
+
+      // Update Plan Card 14
+      var l14 = document.getElementById('hh-label-14'); if (l14) l14.textContent = config.p14.label;
+      var t14 = document.getElementById('hh-title-14'); if (t14) t14.textContent = config.p14.title;
+      var d14 = document.getElementById('hh-desc-14'); if (d14) d14.textContent = config.p14.desc;
+
+      // Also sync dashboard dropdown if present
+      var dashRoutineSelect = document.getElementById('dash-routine-select');
+      if (dashRoutineSelect) dashRoutineSelect.value = routineKey;
+
+      showToast('Configured for ' + config.name + '!');
     }
 
     function selectPlan(planKey, weeklyTotal, mealsCount, perMeal, planName) {
       selectedPlan = mealsCount;
       planWeeklyPrice = weeklyTotal;
       planPerMeal = perMeal;
-      var title = planName || planTitles[planKey] || (mealsCount + ' Meals / Week Plan');
+      var routineConfig = ROUTINE_CONFIGS[currentRoutine] || ROUTINE_CONFIGS['lunch_dinner'];
+      var routineItem = routineConfig['p' + mealsCount] || {};
+      var title = (routineItem.title || planName) + ' (' + mealsCount + ' Meals • ' + routineConfig.shortName + ')';
 
       // 1. Reset all plan cards
       var allCards = document.querySelectorAll('.plan-card');
@@ -4812,7 +4936,9 @@
       var phoneInput = document.getElementById('checkout-phone');
       var addrInput = document.getElementById('checkout-address');
 
-      if (planTitleEl) planTitleEl.textContent = meals + ' Meals / Week Plan';
+      var routineConfig = ROUTINE_CONFIGS[currentRoutine] || ROUTINE_CONFIGS['lunch_dinner'];
+      var routineName = routineConfig.name;
+      if (planTitleEl) planTitleEl.textContent = meals + ' Meals / Week Plan • ' + routineName;
       if (planPriceEl) planPriceEl.textContent = 'Rs. ' + total.toLocaleString();
       if (totalPriceEl) totalPriceEl.textContent = 'Rs. ' + total.toLocaleString();
       if (btnTextEl) btnTextEl.textContent = 'Confirm Subscription & Place Order (Rs. ' + total.toLocaleString() + ')';
@@ -4848,7 +4974,10 @@
       currentUser.name = name;
       currentUser.phone = phone;
       currentUser.address = address;
-      currentUser.plan = selectedPlan + ' Meals / Week Plan';
+      var routineConfig = ROUTINE_CONFIGS[currentRoutine] || ROUTINE_CONFIGS['lunch_dinner'];
+      currentUser.routine = currentRoutine;
+      currentUser.routineName = routineConfig.name;
+      currentUser.plan = selectedPlan + ' Meals / Week Plan (' + routineConfig.name + ')';
       currentUser.amount = planWeeklyPrice;
       isLoggedIn = true;
 
