@@ -55,6 +55,37 @@
     .hidden { display: none !important; }
 
     /* Touch & Mobile Responsiveness Enhancements */
+    /* Mobile Active Tab Fix: Guarantee white text when active so green background never hides label */
+    .meal-tab-btn {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .meal-tab-btn.is-active,
+    .meal-tab-btn.bg-primary,
+    button.meal-tab-btn.bg-primary {
+      background-color: #0c412d !important;
+      color: #ffffff !important;
+    }
+    .meal-tab-btn.is-active:hover,
+    .meal-tab-btn.is-active:focus,
+    .meal-tab-btn.is-active:active,
+    .meal-tab-btn.bg-primary:hover,
+    .meal-tab-btn.bg-primary:focus,
+    .meal-tab-btn.bg-primary:active {
+      background-color: #0c412d !important;
+      color: #ffffff !important;
+    }
+
+    /* Maintain crisp white text on all active primary buttons on mobile touch/tap */
+    .health-mode-btn.bg-primary,
+    .health-mode-btn.bg-primary *,
+    .hh-tab.bg-primary,
+    .hh-tab.bg-primary *,
+    #dash-meals-selector button.bg-primary {
+      color: #ffffff !important;
+      background-color: #0c412d !important;
+    }
+
     html {
       scroll-behavior: smooth;
       -webkit-tap-highlight-color: transparent;
@@ -490,11 +521,7 @@
 
           <!-- Hero Left Column -->
           <div class="lg:col-span-7 flex flex-col gap-6">
-            <div
-              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary-container/70 text-on-secondary-container text-xs font-bold w-fit tracking-wider uppercase">
-              <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-              Fresh Batch Delivery Open for Delhi, Mumbai, Bangalore & Hyderabad
-            </div>
+
 
             <h1
               class="font-headline text-4xl sm:text-5xl lg:text-6xl text-primary font-bold tracking-tight leading-[1.08]">
@@ -606,24 +633,24 @@
 
             <!-- Segmented Control Tabs -->
             <div
-              class="inline-flex p-1.5 bg-surface-card rounded-full shadow-xs border border-border-subtle self-start md:self-auto overflow-x-auto">
+              class="inline-flex max-w-full p-1 sm:p-1.5 bg-surface-card rounded-full shadow-xs border border-border-subtle overflow-x-auto no-scrollbar touch-pan-x shrink-0">
               <button onclick="filterMeals('all')"
-                class="meal-tab-btn px-5 py-2 rounded-full text-xs font-bold transition-all bg-primary text-white shadow-xs"
+                class="meal-tab-btn is-active px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all bg-primary text-white shadow-xs shrink-0 whitespace-nowrap"
                 data-category="all">
                 All Dishes
               </button>
               <button onclick="filterMeals('breakfast')"
-                class="meal-tab-btn px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary"
+                class="meal-tab-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary shrink-0 whitespace-nowrap"
                 data-category="breakfast">
                 Breakfast
               </button>
               <button onclick="filterMeals('lunch')"
-                class="meal-tab-btn px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary"
+                class="meal-tab-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary shrink-0 whitespace-nowrap"
                 data-category="lunch">
                 Lunch
               </button>
               <button onclick="filterMeals('dinner')"
-                class="meal-tab-btn px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary"
+                class="meal-tab-btn px-4 sm:px-5 py-2 rounded-full text-xs font-bold transition-all text-on-surface-variant hover:text-primary shrink-0 whitespace-nowrap"
                 data-category="dinner">
                 Dinner
               </button>
@@ -1335,17 +1362,17 @@
         </div>
 
         <!-- Household Size Filter Tabs (Like HelloFresh / Blue Apron) -->
-        <div class="flex items-center justify-center gap-2 mb-8 sm:mb-10">
-          <div class="p-1 rounded-full bg-surface-card-warm border border-border-subtle inline-flex shadow-xs" id="plan-household-toggle">
+        <div class="flex items-center justify-center gap-2 mb-8 sm:mb-10 px-2">
+          <div class="p-1 rounded-full bg-surface-card-warm border border-border-subtle inline-flex shadow-xs max-w-full overflow-x-auto no-scrollbar" id="plan-household-toggle">
             <button type="button" onclick="setHouseholdSize('couple')" id="tab-hh-couple"
-              class="hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5">
+              class="hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
               <span class="material-symbols-outlined text-[16px]">groups</span>
-              <span>2 People (Couples &amp; Family)</span>
+              <span>2 People <span class="hidden sm:inline">(Couples &amp; Family)</span></span>
             </button>
             <button type="button" onclick="setHouseholdSize('individual')" id="tab-hh-individual"
-              class="hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5">
+              class="hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap">
               <span class="material-symbols-outlined text-[16px]">person</span>
-              <span>1 Person (Individual)</span>
+              <span>1 Person <span class="hidden sm:inline">(Individual)</span></span>
             </button>
           </div>
         </div>
@@ -3864,13 +3891,17 @@
     // Meal Tab Filtering on Home Menu
     function filterMeals(category) {
       document.querySelectorAll('.meal-tab-btn').forEach(function(btn) {
-        btn.classList.remove('bg-primary', 'text-white', 'shadow-xs');
+        btn.classList.remove('bg-primary', 'text-white', 'shadow-xs', 'is-active');
         btn.classList.add('text-on-surface-variant');
+        btn.style.setProperty('color', '', '');
+        btn.style.setProperty('background-color', '', '');
       });
       var activeBtn = document.querySelector('.meal-tab-btn[data-category="' + category + '"]');
       if (activeBtn) {
-        activeBtn.classList.add('bg-primary', 'text-white', 'shadow-xs');
+        activeBtn.classList.add('bg-primary', 'text-white', 'shadow-xs', 'is-active');
         activeBtn.classList.remove('text-on-surface-variant');
+        activeBtn.style.setProperty('color', '#ffffff', 'important');
+        activeBtn.style.setProperty('background-color', '#0c412d', 'important');
       }
 
       document.querySelectorAll('.meal-card[data-category]').forEach(function(card) {
@@ -4027,8 +4058,16 @@
       var btnInd = document.getElementById('tab-hh-individual');
 
       if (type === 'couple') {
-        if (btnCouple) btnCouple.className = 'hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5';
-        if (btnInd) btnInd.className = 'hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5';
+        if (btnCouple) {
+          btnCouple.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+          btnCouple.style.setProperty('color', '#ffffff', 'important');
+          btnCouple.style.setProperty('background-color', '#0c412d', 'important');
+        }
+        if (btnInd) {
+          btnInd.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+          btnInd.style.setProperty('color', '', '');
+          btnInd.style.setProperty('background-color', '', '');
+        }
 
         var l6 = document.getElementById('hh-label-6'); if (l6) l6.textContent = '3 Dinners for 2';
         var d6 = document.getElementById('hh-desc-6'); if (d6) d6.textContent = 'Perfect for 3 dinners for two or supplementing your home cooking during busy workdays.';
@@ -4039,8 +4078,16 @@
         var l14 = document.getElementById('hh-label-14'); if (l14) l14.textContent = '7 Dinners for 2';
         var d14 = document.getElementById('hh-desc-14'); if (d14) d14.textContent = 'Full 7-day culinary dinner reset. Fresh dinner every evening without cooking stress.';
       } else {
-        if (btnCouple) btnCouple.className = 'hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5';
-        if (btnInd) btnInd.className = 'hh-tab px-4 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5';
+        if (btnCouple) {
+          btnCouple.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+          btnCouple.style.setProperty('color', '', '');
+          btnCouple.style.setProperty('background-color', '', '');
+        }
+        if (btnInd) {
+          btnInd.className = 'hh-tab px-3.5 sm:px-6 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap';
+          btnInd.style.setProperty('color', '#ffffff', 'important');
+          btnInd.style.setProperty('background-color', '#0c412d', 'important');
+        }
 
         var l6 = document.getElementById('hh-label-6'); if (l6) l6.textContent = '6 Lunches for 1';
         var d6 = document.getElementById('hh-desc-6'); if (d6) d6.textContent = 'Mon to Sat healthy office lunches. Avoid heavy takeout and mid-afternoon energy crashes.';
@@ -6457,7 +6504,7 @@
   <!-- DEMO LOGIN MODAL                                             -->
   <!-- =========================================================== -->
   <div id="login-modal" class="fixed inset-0 z-[70] bg-[#101f15]/75 backdrop-blur-sm hidden items-center justify-center p-4" style="display: none;">
-    <div class="bg-surface-card rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 border border-border-subtle relative overflow-hidden">
+    <div class="bg-surface-card rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl flex flex-col gap-6 border border-border-subtle relative overflow-hidden max-h-[92vh] overflow-y-auto">
       <!-- Brand header -->
       <div class="text-center">
         <div class="inline-flex items-center gap-2 mb-2">
@@ -7093,8 +7140,8 @@
   </button>
 
   <!-- Chat Window -->
-  <div id="chat-window" class="fixed bottom-24 right-6 z-60 w-80 sm:w-96 bg-surface-card rounded-3xl shadow-2xl border border-border-subtle flex flex-col overflow-hidden hidden transition-all"
-    style="display: none; z-index:60; max-height:520px;">
+  <div id="chat-window" class="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-60 w-[calc(100vw-1.5rem)] max-w-sm sm:max-w-md bg-surface-card rounded-3xl shadow-2xl border border-border-subtle flex flex-col overflow-hidden hidden transition-all"
+    style="display: none; z-index:60; max-height: min(520px, calc(100vh - 120px));">
 
     <!-- Chat Header -->
     <div class="bg-primary px-4 py-4 flex items-center justify-between shrink-0">
