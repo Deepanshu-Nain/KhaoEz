@@ -109,3 +109,4 @@ KhaoEzy/
 ## 📄 License
 
 MIT License. Crafted with 💚 for clean, healthy eating.
+

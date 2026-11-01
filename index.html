@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KhaoEzy " Chef-Crafted Meals. Farm Fresh. Delivered Easy.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +50,30 @@
   </script>
   <style>
     .hidden { display: none !important; }
+
+    /* Touch & Mobile Responsiveness Enhancements */
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      overflow-x: hidden;
+    }
+
+    .touch-pan-x {
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
 
     :root {
       --color-primary: #0c412d;
@@ -294,76 +318,76 @@
   <!-- PERMANENT FIXED NAVBAR (Clean KhaoEzy Header)                               -->
   <!-- ========================================================================= -->
   <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border-subtle shadow-xs transition-all duration-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 sm:h-20 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
 
       <!-- Brand Logo & Interactive Navigation Tabs at Right of Brand Name -->
-      <div class="flex items-center gap-2 sm:gap-4 lg:gap-6 min-w-0">
+      <div class="flex items-center gap-1.5 sm:gap-4 lg:gap-6 min-w-0 flex-1 sm:flex-initial">
         <!-- Brand Logo (Home & Backtrack) -->
         <a href="javascript:void(0)" onclick="showPage('page-home')"
-          class="flex items-center gap-2 group cursor-pointer shrink-0" title="KhaoEzy Home">
-          <span class="material-symbols-outlined text-carb-accent text-[28px] sm:text-[32px] font-bold transition-transform group-hover:scale-110">eco</span>
-          <span class="brand-name text-2xl sm:text-3xl tracking-tight">KhaoEzy</span>
+          class="flex items-center gap-1.5 sm:gap-2 group cursor-pointer shrink-0" title="KhaoEzy Home">
+          <span class="material-symbols-outlined text-carb-accent text-[26px] sm:text-[32px] font-bold transition-transform group-hover:scale-110">eco</span>
+          <span class="brand-name text-xl sm:text-2xl lg:text-3xl tracking-tight">KhaoEzy</span>
         </a>
 
         <!-- Interactive Navigation Tabs: Easily Switch & Backtrack -->
-        <nav class="flex items-center p-1 bg-surface-card-warm/95 rounded-full border border-border-subtle shadow-xs overflow-x-auto no-scrollbar shrink-0 max-w-[calc(100vw-180px)] sm:max-w-none">
+        <nav class="flex items-center p-1 bg-surface-card-warm/95 rounded-full border border-border-subtle shadow-xs overflow-x-auto no-scrollbar shrink-0 max-w-[calc(100vw-130px)] sm:max-w-none touch-pan-x">
           <!-- Tab 1: Menu -->
           <button onclick="navigateTo('page-home', 'menu')" id="nav-tab-menu"
-            class="topbar-tab px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-primary text-white shadow-xs flex items-center gap-1.5 shrink-0"
+            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all bg-primary text-white shadow-xs flex items-center gap-1 shrink-0 whitespace-nowrap"
             title="This Week's Chef Menu">
-            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">restaurant_menu</span>
+            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">restaurant_menu</span>
             <span>Menu</span>
           </button>
           
           <!-- Tab 2: Science & Scoring -->
           <button onclick="showPage('page-science')" id="nav-tab-science"
-            class="topbar-tab px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0"
+            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
             title="Clinical Nutrition & Metabolic Health Scoring">
-            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">analytics</span>
+            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">analytics</span>
             <span class="hidden md:inline">Science &amp; Scoring</span>
             <span class="md:hidden">Science</span>
           </button>
           
           <!-- Tab 3: Farm Sourcing -->
           <button onclick="showPage('page-sourcing')" id="nav-tab-sourcing"
-            class="topbar-tab px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0"
+            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
             title="Regenerative Indian Farms &amp; Sourcing">
-            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">agriculture</span>
+            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">agriculture</span>
             <span class="hidden md:inline">Farm Sourcing</span>
             <span class="md:hidden">Sourcing</span>
           </button>
           
           <!-- Tab 4: Member Dashboard -->
           <button onclick="showPage('page-dashboard')" id="nav-tab-dashboard"
-            class="topbar-tab px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1.5 shrink-0"
+            class="topbar-tab px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-on-surface-variant hover:text-primary hover:bg-white/60 flex items-center gap-1 shrink-0 whitespace-nowrap"
             title="Member Dashboard &amp; Deliveries">
-            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">dashboard</span>
+            <span class="material-symbols-outlined text-[15px] sm:text-[18px]">dashboard</span>
             <span>Dashboard</span>
           </button>
         </nav>
       </div>
 
       <!-- Right Action Items: Cart, Login / Profile, Choose Plan, Mobile Toggle -->
-      <div class="flex items-center gap-2 sm:gap-3.5">
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
         
         <!-- Cart Drawer Button with live badge -->
         <button onclick="toggleCartDrawer(true)"
-          class="relative p-2 sm:p-2.5 rounded-full hover:bg-surface-card-warm text-primary transition-colors flex items-center justify-center border border-border-subtle"
+          class="relative p-2 rounded-full hover:bg-surface-card-warm text-primary transition-colors flex items-center justify-center border border-border-subtle shrink-0"
           title="Open Your Box / Cart">
-          <span class="material-symbols-outlined text-[22px] sm:text-[24px]">shopping_bag</span>
+          <span class="material-symbols-outlined text-[20px] sm:text-[24px]">shopping_bag</span>
           <span id="cart-badge"
-            class="absolute -top-1 -right-1 bg-protein-accent text-white text-[10px] sm:text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">0</span>
+            class="absolute -top-1 -right-1 bg-protein-accent text-white text-[10px] sm:text-[11px] font-bold w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shadow-xs">0</span>
         </button>
 
         <!-- Logged Out Controls -->
-        <div id="nav-logged-out" class="flex items-center gap-2 sm:gap-3">
+        <div id="nav-logged-out" class="flex items-center gap-1.5 sm:gap-2.5">
           <button id="nav-login-btn" onclick="openLoginModal()"
-            class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-primary hover:bg-surface-card-warm px-3 sm:px-4 py-2 rounded-full border border-border-subtle hover:border-primary transition-all">
-            <span class="material-symbols-outlined text-[18px] text-carb-accent">person</span>
-            <span>Log In</span>
+            class="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-primary hover:bg-surface-card-warm px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-border-subtle hover:border-primary transition-all shrink-0">
+            <span class="material-symbols-outlined text-[16px] sm:text-[18px] text-carb-accent">person</span>
+            <span class="hidden xs:inline">Log In</span>
           </button>
           <button onclick="navigateTo('page-home', 'plans')"
-            class="inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-primary text-white text-xs sm:text-sm font-bold shadow-xs hover:bg-primary-container transition-all transform hover:-translate-y-0.5 active:scale-95">
+            class="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-bold shadow-xs hover:bg-primary-container transition-all transform hover:-translate-y-0.5 active:scale-95 shrink-0 whitespace-nowrap">
             <span>Choose Plan</span>
           </button>
         </div>
@@ -557,7 +581,6 @@
           </div>
         </div>
       </section>
-</section>
 
       <!-- ===================================================================== -->
       <!-- SECTION: MEAL MENU EXPLORER                                           -->
@@ -2322,7 +2345,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="farm-cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="farm-cards-container">
 
           <!-- Farm 1: Malwa MP -->
           <div class="farm-card group bg-surface-card rounded-2xl overflow-hidden shadow-xs border border-border-subtle flex flex-col hover:-translate-y-2 hover:shadow-xl hover:border-secondary transition-all duration-300"
